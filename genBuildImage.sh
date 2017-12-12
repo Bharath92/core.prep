@@ -30,16 +30,11 @@ set_context() {
 
 create_image() {
   pushd $RES_REPO_STATE
-
-  echo "Replacing Dockerfile with $BLD_IMG"
-  sed -i "s/{{%TAG%}}/$TAG_NAME/g" Dockerfile
-
-  echo "Starting Docker build & push for $BLD_IMG"
-  sudo docker build -t=$BLD_IMG --pull --no-cache .
-  echo "Pushing $BLD_IMG"
-  sudo docker push $BLD_IMG
-  echo "Completed Docker build &  push for $BLD_IMG"
-
+    echo "Starting Docker build & push for $BLD_IMG"
+    sudo docker build -t=$BLD_IMG --pull --no-cache .
+    echo "Pushing $BLD_IMG"
+    sudo docker push $BLD_IMG
+    echo "Completed Docker build & push for $BLD_IMG"
   popd
 }
 
