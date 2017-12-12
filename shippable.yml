@@ -102,7 +102,7 @@ jobs:
       - IN: vault_repo
       - IN: gitlab_repo
       - IN: rabbitmq_repo
-      - IN: redis_repo
+      - IN: postgres_repo
       - TASK:
         - script: |
             pushd $(shipctl get_resource_state "core_prep_src")
