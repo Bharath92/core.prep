@@ -170,27 +170,27 @@ jobs:
     on_failure:
       - script: echo 'Failed job .... :('
 
-#  - name: admiral_ubu_14_04_prep
-#    type: runSh
-#    triggerMode: parallel
-#    dependencyMode: strict
-#    steps:
-#      - IN: core_prep_src
-#        switch: off
-#      - IN: core_dh_cli
-#        switch: off
-#      - IN: microbase_img
-#      - IN: admiral_repo
-#      - TASK:
-#        - script: |
-#            pushd $(shipctl get_resource_state "core_prep_src")
-#              ./buildImage.sh admiral
-#            popd
-#      - OUT: admiral_img
-#    on_success:
-#      - script: echo 'on success !!!!!'
-#    on_failure:
-#      - script: echo 'Failed job .... :('
+  - name: admiral_ubu_14_04_prep
+    type: runSh
+    triggerMode: parallel
+    dependencyMode: strict
+    steps:
+      - IN: core_prep_src
+        switch: off
+      - IN: core_dh_cli
+        switch: off
+      - IN: microbase_img
+      - IN: admiral_repo
+      - TASK:
+        - script: |
+            pushd $(shipctl get_resource_state "core_prep_src")
+              ./buildImage.sh admiral
+            popd
+      - OUT: admiral_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
 
   - name: tag_push_dry_dh
     type: runSh
