@@ -1,0 +1,163 @@
+resources:
+  - name: core_prep_src
+    type: gitRepo
+    integration: avinci_gh
+    pointer:
+      sourceName: shippable/core.prep
+      branch: master
+
+  - name: core_dh_cli
+    type: cliConfig
+    integration: ric03uec-dockerhub
+
+  - name: core_gh_ssh
+    type: integration
+    integration: avi_gh_ssh
+
+  - name: redis_repo
+    type: gitRepo
+    integration: ric03uec-github
+    pointer:
+      sourceName: dry-dock/redis
+      branch: master
+
+  - name: redis_img
+    type: image
+    integration: shipDH
+    pointer:
+      sourceName: "drydock/redis"
+    seed:
+      versionName: master
+
+  - name: rabbitmq_repo
+    type: gitRepo
+    integration: avinci_gh
+    pointer:
+      sourceName: dry-dock/rabbitmq
+      branch: master
+
+  - name: rabbitmq_img
+    type: image
+    integration: shipDH
+    pointer:
+      sourceName: "drydock/rabbitmq"
+    seed:
+      versionName: master
+
+  - name: gitlab_repo
+    type: gitRepo
+    integration: ric03uec-github
+    pointer:
+      sourceName: dry-dock/gitlab
+      branch: master
+
+  - name: gitlab_img
+    type: image
+    integration: shipDH
+    pointer:
+      sourceName: "drydock/gitlab"
+    seed:
+      versionName: latest
+
+  - name: vault_repo
+    type: gitRepo
+    integration: avinci_gh
+    pointer:
+      sourceName: dry-dock/vault
+      branch: master
+
+  - name: vault_img
+    type: image
+    integration: shipDH
+    pointer:
+      sourceName: "drydock/vault"
+    seed:
+      versionName: master
+
+  - name: postgres_repo
+    type: gitRepo
+    integration: avinci_gh
+    pointer:
+      sourceName: dry-dock/postgres
+      branch: master
+
+  - name: postgres_img
+    type: image
+    integration: shipDH
+    pointer:
+      sourceName: "drydock/postgres"
+    seed:
+      versionName: master
+
+jobs:
+  - name: core_prep
+    type: runSh
+    triggerMode: parallel
+    steps:
+      - IN: core_prep_src
+        switch: off
+      - IN: core_dh_cli
+        switch: off
+      - IN: redis_repo
+      - IN: vault_repo
+      - IN: gitlab_repo
+      - IN: rabbitmq_repo
+      - IN: redis_repo
+      - TASK:
+        - script: |
+            pushd $(shipctl get_resource_state "core_prep_src")
+              ./genBuildImage.sh
+            popd
+      - OUT: postgres_img
+      - OUT: vault_img
+      - OUT: gitlab_img
+      - OUT: rabbitmq_img
+      - OUT: redis_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+
+  ### Tagging u16 services
+  - name: tag_push_core
+    type: runSh
+    triggerMode: parallel
+    dependencyMode: strict
+    steps:
+      - IN: core_prep_src
+        switch: off
+      - IN: core_dh_cli
+        switch: off
+      - IN: core_gh_ssh
+        switch: off
+      - IN: gitlab_img
+        switch: off
+      - IN: gitlab_repo
+        switch: off
+      - IN: postgres_img
+        switch: off
+      - IN: postgres_repo
+        switch: off
+      - IN: rabbitmq_img
+        switch: off
+      - IN: rabbitmq_repo
+        switch: off
+      - IN: redis_img
+        switch: off
+      - IN: redis_repo
+        switch: off
+      - IN: vault_img
+        switch: off
+      - IN: vault_repo
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: |
+            pushd $(shipctl get_resource_state "core_prep_src")
+              ./tagAndPushSvcs.sh
+            popd
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
