@@ -192,7 +192,7 @@ jobs:
     on_failure:
       - script: echo 'Failed job .... :('
 
-  - name: tag_push_dry_dh
+  - name: dry_dh_tag_push
     type: runSh
     triggerMode: parallel
     dependencyMode: strict
@@ -234,7 +234,7 @@ jobs:
     on_failure:
       - script: echo 'Failed job .... :('
 
-  - name: tag_push_ship_dh
+  - name: ship_dh_tag_push
     type: runSh
     triggerMode: parallel
     dependencyMode: strict
@@ -254,6 +254,30 @@ jobs:
         - script: |
             pushd $(shipctl get_resource_state "core_prep_src")
               ./tagAndPushSvcs.sh drydock shippable dhShippable.txt
+            popd
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: admiral_ubu_14_04_tag_push
+    type: runSh
+    steps:
+      - IN: core_prep_src
+        switch: off
+      - IN: admiral_repo
+        switch: off
+      - IN: admiral_img
+        switch: off
+      - IN: core_gh_ssh
+        switch: off
+      - IN: core_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: |
+            pushd $(shipctl get_resource_state "core_prep_src")
+              ./tagAndPushAdmiralImageRepo.sh
             popd
     on_success:
       - script: echo 'on success !!!!!'
