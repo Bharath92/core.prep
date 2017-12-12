@@ -89,36 +89,6 @@ resources:
     seed:
       versionName: master
 
-  - name: microbase_repo
-    type: gitRepo
-    integration: avinci_gh
-    pointer:
-      sourceName: shippable/microbase
-      branch: master
-
-  - name: microbase_img
-    type: image
-    integration: shipDH
-    pointer:
-      sourceName: "drydock/microbase"
-    seed:
-      versionName: master
-
-  - name: admiral_repo
-    type: gitRepo
-    integration: avinci_gh
-    pointer:
-      sourceName: shippable/admiral
-      branch: master
-
-  - name: admiral_img
-    type: image
-    integration: shipDH
-    pointer:
-      sourceName: "drydock/admiral"
-    seed:
-      versionName: latest
-
 jobs:
   - name: core_prep
     type: runSh
