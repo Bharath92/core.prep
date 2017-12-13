@@ -100,10 +100,10 @@ jobs:
       - IN: rabbitmq_repo
       - IN: postgres_repo
       - TASK:
-        - script: |
-            pushd $(shipctl get_resource_state "core_prep_src")
-              ./genBuildImage.sh
-            popd
+          script:
+            - pushd $(shipctl get_resource_state "core_prep_src")
+            - ./genBuildImage.sh
+            - popd
       - OUT: postgres_img
       - OUT: vault_img
       - OUT: gitlab_img
