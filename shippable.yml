@@ -96,6 +96,8 @@ jobs:
         switch: off
       - IN: core_bits_cli
         switch: off
+        scopes:
+          - ecr
       - IN: redis_repo
       - IN: vault_repo
       - IN: gitlab_repo
