@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
+export CONTEXT="$1"
 export HUB_ORG="374168611083.dkr.ecr.us-east-1.amazonaws.com"
 
 set_context() {
-
   export IMAGE_NAME=$(echo $CONTEXT | awk '{print tolower($0)}')
   export RES_REPO=$CONTEXT"_repo"
   export RES_IMAGE_OUT=$CONTEXT"_img"
@@ -25,7 +25,6 @@ set_context() {
   echo "BLD_IMG=$BLD_IMG"
   echo "BUILD_NUMBER=$BUILD_NUMBER"
   echo "RES_REPO_COMMIT=$RES_REPO_COMMIT"
-
 }
 
 create_image() {

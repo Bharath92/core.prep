@@ -106,7 +106,7 @@ jobs:
       - TASK:
           script:
             - pushd $(shipctl get_resource_state "core_prep_src")
-            - ./genBuildImage.sh
+            - ./genBuildImage.sh core_prep
             - popd
       - OUT: postgres_img
       - OUT: vault_img
