@@ -6,9 +6,11 @@ resources:
       sourceName: shippable/core.prep
       branch: master
 
-  - name: core_dh_cli
+  - name: core_bits_cli
     type: cliConfig
-    integration: ric03uec-dockerhub
+    integration: ecr_bits_push
+    pointer:
+      region: us-east-1
 
   - name: redis_repo
     type: gitRepo
@@ -92,7 +94,7 @@ jobs:
     steps:
       - IN: core_prep_src
         switch: off
-      - IN: core_dh_cli
+      - IN: core_bits_cli
         switch: off
       - IN: redis_repo
       - IN: vault_repo

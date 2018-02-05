@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export HUB_ORG="drydock"
+export HUB_ORG="374168611083.dkr.ecr.us-east-1.amazonaws.com"
 
 set_context() {
 
